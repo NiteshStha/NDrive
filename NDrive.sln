@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31025.194
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NDriveAPI", "NDriveAPI\NDriveAPI.csproj", "{6897DF2E-EE92-4388-AA96-6B5E436D904D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6897DF2E-EE92-4388-AA96-6B5E436D904D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6897DF2E-EE92-4388-AA96-6B5E436D904D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6897DF2E-EE92-4388-AA96-6B5E436D904D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6897DF2E-EE92-4388-AA96-6B5E436D904D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E10FECA0-0840-4F91-8380-37E7023DC7B6}
+	EndGlobalSection
+EndGlobal
