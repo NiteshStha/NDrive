@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using PatientRegistrationServer.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,10 @@ namespace NDriveAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.ConfigureCors();
+            services.ConfigureIISIntegration();
+            services.ConfigurePgContext(Configuration);
+            services.ConfigureRepositoryWrapper();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -48,7 +53,13 @@ namespace NDriveAPI
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseCors(options =>
+                options.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
 
             app.UseEndpoints(endpoints =>
             {

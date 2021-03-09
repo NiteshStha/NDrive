@@ -1,10 +1,6 @@
 ﻿using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Utilities.Helpers;
 
 namespace Entities
@@ -14,8 +10,8 @@ namespace Entities
         public RepositoryContext(DbContextOptions<RepositoryContext> options) : base(options)
         {
         }
-
         public DbSet<User> Users { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -27,7 +23,8 @@ namespace Entities
                 Username = "nitesh",
                 Password = PasswordHasher.Hash("nitesh"),
                 Email = "nitesh@gmail.com",
-                DateOfBirth = DateTime.Now
+                DateOfBirth = new DateTime(1996, 11, 25),
+                CreatedDate = DateTime.Now
             });
         }
     }

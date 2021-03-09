@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Contracts;
+using Contract;
 using Entities;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;

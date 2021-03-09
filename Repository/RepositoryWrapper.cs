@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Contracts;
+using Contract;
 using Entities;
 
 namespace Repository
@@ -8,8 +8,10 @@ namespace Repository
     {
         private readonly RepositoryContext _repositoryContext;
         private IUserRepository _user;
+        private IRefreshTokenRepository _refreshToken;
 
         public IUserRepository User => _user ??= new UserRepository(_repositoryContext);
+        public IRefreshTokenRepository RefreshToken => _refreshToken ??= new RefreshTokenRepository(_repositoryContext);
 
         public RepositoryWrapper(RepositoryContext repositoryContext)
         {

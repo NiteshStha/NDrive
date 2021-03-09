@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Contract;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using NDriveAPI.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,36 +16,29 @@ namespace NDriveAPI.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        // GET: api/<UsersController>
+        private readonly IRepositoryWrapper _repo;
+        private readonly AppSettings _appSettings;
+
+        public UsersController(IRepositoryWrapper repo, IOptions<AppSettings> appSettings)
+        {
+            this._repo = repo;
+            this._appSettings = appSettings.Value;
+        }
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<UsersController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<UsersController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<UsersController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<UsersController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            try
+            {
+                var users = await _repo.User.FindAll();
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error while retrieving data");
+            }
+            
         }
     }
 }

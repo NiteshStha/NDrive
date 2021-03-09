@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Contracts;
+using Contract;
 using Entities;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,10 +1,11 @@
 ﻿using System.Threading.Tasks;
 
-namespace Contracts
+namespace Contract
 {
     public interface IRepositoryWrapper
     {
         IUserRepository User { get; }
+        IRefreshTokenRepository RefreshToken { get; }
 
         Task Commit();
         void Save();
