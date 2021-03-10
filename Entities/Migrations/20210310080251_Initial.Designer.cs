@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Entities.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20210309100413_Initial")]
+    [Migration("20210310080251_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,44 @@ namespace Entities.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+            modelBuilder.Entity("Entities.Models.RefreshToken", b =>
+                {
+                    b.Property<int>("RefreshTokenId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("CreatedByIp")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("ExpireDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("ReplacedByToken")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RevokedByIp")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("RevokedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("RefreshTokenId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
 
             modelBuilder.Entity("Entities.Models.User", b =>
                 {
@@ -57,14 +95,28 @@ namespace Entities.Migrations
                         new
                         {
                             UserId = 1,
-                            CreatedDate = new DateTime(2021, 3, 9, 15, 49, 12, 652, DateTimeKind.Local).AddTicks(7374),
+                            CreatedDate = new DateTime(2021, 3, 10, 13, 47, 51, 166, DateTimeKind.Local).AddTicks(567),
                             DateOfBirth = new DateTime(1996, 11, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "nitesh@gmail.com",
                             FirstName = "Nitesh",
                             LastName = "Shrestha",
-                            Password = "1000.up6bDyFDwo4TCJjKaxcSRQ==.d1QeYGCdvjFQF/5yR7OAOchNH3wV6X2b2PDwvsqMrsc=",
+                            Password = "1000.ZWGbnOSmUYzAZpCXZ9clVg==.Kq7L9ujCz8uR1oNNx+yhBTArBYkYanApSPXkYlECEdk=",
                             Username = "nitesh"
                         });
+                });
+
+            modelBuilder.Entity("Entities.Models.RefreshToken", b =>
+                {
+                    b.HasOne("Entities.Models.User", null)
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Entities.Models.User", b =>
+                {
+                    b.Navigation("RefreshTokens");
                 });
 #pragma warning restore 612, 618
         }

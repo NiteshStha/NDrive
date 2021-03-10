@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using NDriveAPI.Services;
 using PatientRegistrationServer.Extensions;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,8 @@ namespace NDriveAPI
             services.ConfigureIISIntegration();
             services.ConfigurePgContext(Configuration);
             services.ConfigureRepositoryWrapper();
+            services.ConfigureAppSettingsAndJWT(Configuration);
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

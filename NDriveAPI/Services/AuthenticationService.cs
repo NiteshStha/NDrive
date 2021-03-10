@@ -81,9 +81,26 @@ namespace NDriveAPI.Services
             );
         }
 
-        public Task<bool> RevokeToken(string token, string ipAddress)
+        public async Task<bool> RevokeToken(string token, string ipAddress)
         {
-            throw new NotImplementedException();
+            var user = await _repository.User.FindById(u => u.RefreshTokens.Any(t => t.Token == token));
+
+            // return false if no user found with token
+            if (user == null) return false;
+
+            var refreshToken = await _repository.RefreshToken
+                .FindById(t => t.UserId == user.UserId && t.Token == token);
+
+            // return false if token is not active
+            if (!refreshToken.IsActive) return false;
+
+            // revoke token and save
+            refreshToken.RevokedDate = DateTime.UtcNow;
+            refreshToken.RevokedByIp = ipAddress;
+            _repository.User.Update(user);
+            await _repository.Commit();
+
+            return true;
         }
 
         private string generateJwtToken(User user)
