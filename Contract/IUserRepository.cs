@@ -6,5 +6,6 @@ namespace Contract
     public interface IUserRepository : IRepositoryBase<User>
     {
         Task<User> Authenticate(string username, string password);
+        Task<User> GetRefreshTokens(int id);
     }
 }

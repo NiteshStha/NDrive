@@ -31,5 +31,12 @@ namespace Repository
             // check if password is correct and return user if the password is correct
             return !PasswordHasher.Validate(user.Password, password) ? null : user;
         }
+
+        public async Task<User> GetRefreshTokens(int id)
+        {
+            return await _repositoryContext.Users
+                .Include(u => u.RefreshTokens)
+                .FirstOrDefaultAsync(u => u.UserId == id);
+        }
     }
 }

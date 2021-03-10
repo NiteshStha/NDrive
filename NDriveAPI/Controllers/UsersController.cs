@@ -1,4 +1,5 @@
 ﻿using Contract;
+using Entities.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Utilities.Responses;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -37,7 +39,12 @@ namespace NDriveAPI.Controllers
             try
             {
                 var users = await _repo.User.FindAll();
-                return Ok(users);
+                return Ok(new JsonResponse<IEnumerable<User>>
+                    (
+                        StatusCodes.Status200OK,
+                        null,
+                        users
+                    ));
             }
             catch (Exception ex)
             {
@@ -98,6 +105,28 @@ namespace NDriveAPI.Controllers
                 return NotFound(new { message = "Token not found" });
 
             return Ok(new { message = "Token revoked" });
+        }
+
+        [HttpGet("{id}/refresh-tokens")]
+        public async Task<IActionResult> GetRefreshTokens(int id)
+        {
+            try
+            {
+                var user = await _repo.User.GetRefreshTokens(id);
+                if (user == null) return NotFound();
+
+                return Ok(new JsonResponse<IEnumerable<RefreshToken>>
+                    (
+                        StatusCodes.Status200OK,
+                        user.RefreshTokens.Count(),
+                        user.RefreshTokens
+                    ));
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database");
+            }
         }
 
         // Helper Methods 
