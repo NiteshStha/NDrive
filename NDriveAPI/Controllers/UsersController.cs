@@ -33,26 +33,6 @@ namespace NDriveAPI.Controllers
             this._appSettings = appSettings.Value;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            try
-            {
-                var users = await _repo.User.FindAll();
-                return Ok(new JsonResponse<IEnumerable<User>>
-                    (
-                        StatusCodes.Status200OK,
-                        null,
-                        users
-                    ));
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error while retrieving data");
-            }
-        }
-
         [AllowAnonymous]
         [HttpPost("authenticate", Name = "AuthenticateUser")]
         public async Task<IActionResult> Authenticate([FromBody] SignInModel model)
@@ -71,7 +51,7 @@ namespace NDriveAPI.Controllers
             catch (Exception exception)
             {
                 Console.WriteLine(exception);
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
             }
         }
 
@@ -79,32 +59,49 @@ namespace NDriveAPI.Controllers
         [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshToken()
         {
-            var refreshToken = Request.Cookies["refreshToken"];
-            var response = await _authenticationService.RefreshToken(refreshToken, ipAddress());
+            try
+            {
+                var refreshToken = Request.Cookies["refreshToken"];
+                var response = await _authenticationService.RefreshToken(refreshToken, ipAddress());
 
-            if (response == null)
-                return Unauthorized(new { message = "Invalid token" });
+                if (response == null)
+                    return Unauthorized(new { message = "Invalid token" });
 
-            setTokenCookie(response.RefreshToken);
+                setTokenCookie(response.RefreshToken);
 
-            return Ok(response);
+                return Ok(response);
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+            }
         }
 
         [HttpPost("revoke-token")]
         public async Task<IActionResult> RevokeToken([FromBody] RevokeTokenRequest model)
         {
-            // accept token from request body or cookie
-            var token = model.Token ?? Request.Cookies["refreshToken"];
+            try
+            {
+                // accept token from request body or cookie
+                var token = model.Token ?? Request.Cookies["refreshToken"];
 
-            if (string.IsNullOrEmpty(token))
-                return BadRequest(new { message = "Token is required" });
+                if (string.IsNullOrEmpty(token))
+                    return BadRequest(new { message = "Token is required" });
 
-            var response = await _authenticationService.RevokeToken(token, ipAddress());
+                var response = await _authenticationService.RevokeToken(token, ipAddress());
 
-            if (!response)
-                return NotFound(new { message = "Token not found" });
+                if (!response)
+                    return NotFound(new { message = "Token not found" });
 
-            return Ok(new { message = "Token revoked" });
+                return Ok(new { message = "Token revoked" });
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+            }
+
         }
 
         [HttpGet("{id}/refresh-tokens")]
@@ -126,6 +123,46 @@ namespace NDriveAPI.Controllers
             {
                 Console.WriteLine(exception);
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            try
+            {
+                var users = await _repo.User.FindAll();
+                return Ok(new JsonResponse<IEnumerable<User>>
+                    (
+                        StatusCodes.Status200OK,
+                        null,
+                        users
+                    ));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error while retrieving data");
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            try
+            {
+                var user = await _repo.User.FindById(id);
+                return Ok(new JsonResponse<User>
+                    (
+                        StatusCodes.Status200OK,
+                        null,
+                        user
+                    ));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error while retrieving data");
             }
         }
 
