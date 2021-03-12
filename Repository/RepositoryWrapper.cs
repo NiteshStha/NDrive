@@ -9,9 +9,11 @@ namespace Repository
         private readonly RepositoryContext _repositoryContext;
         private IUserRepository _user;
         private IRefreshTokenRepository _refreshToken;
+        private IFolderRepository _folder;
 
         public IUserRepository User => _user ??= new UserRepository(_repositoryContext);
         public IRefreshTokenRepository RefreshToken => _refreshToken ??= new RefreshTokenRepository(_repositoryContext);
+        public IFolderRepository Folder => _folder ??= new FolderRepository(_repositoryContext);
 
         public RepositoryWrapper(RepositoryContext repositoryContext)
         {

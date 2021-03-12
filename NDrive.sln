@@ -7,11 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NDriveAPI", "NDriveAPI\NDri
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{DDB984D9-811E-4F7F-A192-1438C4524661}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utilities", "Utilities\Utilities.csproj", "{BC761138-4DB2-4E08-B04F-2E2251310406}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utilities", "Utilities\Utilities.csproj", "{BC761138-4DB2-4E08-B04F-2E2251310406}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contract", "Contract\Contract.csproj", "{6A9AC868-4966-443F-88BF-5D01E722633E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contract", "Contract\Contract.csproj", "{6A9AC868-4966-443F-88BF-5D01E722633E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{4908E43E-FE38-4763-8C8F-479AD1722A47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Repository.csproj", "{4908E43E-FE38-4763-8C8F-479AD1722A47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

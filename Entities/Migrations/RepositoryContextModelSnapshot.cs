@@ -19,6 +19,63 @@ namespace Entities.Migrations
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+            modelBuilder.Entity("Entities.Models.Folder", b =>
+                {
+                    b.Property<int>("FolderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("FolderName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("ParentFolderId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("FolderId");
+
+                    b.HasIndex("ParentFolderId");
+
+                    b.ToTable("Folders");
+
+                    b.HasData(
+                        new
+                        {
+                            FolderId = 1,
+                            FolderName = "Game"
+                        },
+                        new
+                        {
+                            FolderId = 2,
+                            FolderName = "Rocket League",
+                            ParentFolderId = 1
+                        },
+                        new
+                        {
+                            FolderId = 3,
+                            FolderName = "Stardew Valley",
+                            ParentFolderId = 1
+                        },
+                        new
+                        {
+                            FolderId = 4,
+                            FolderName = "Fortnite",
+                            ParentFolderId = 1
+                        },
+                        new
+                        {
+                            FolderId = 5,
+                            FolderName = "Anime"
+                        },
+                        new
+                        {
+                            FolderId = 6,
+                            FolderName = "Attack On Titan",
+                            ParentFolderId = 5
+                        });
+                });
+
             modelBuilder.Entity("Entities.Models.RefreshToken", b =>
                 {
                     b.Property<int>("RefreshTokenId")
@@ -71,21 +128,32 @@ namespace Entities.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Password")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Username")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("UserId");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Username")
+                        .IsUnique();
 
                     b.ToTable("Users");
 
@@ -93,14 +161,22 @@ namespace Entities.Migrations
                         new
                         {
                             UserId = 1,
-                            CreatedDate = new DateTime(2021, 3, 10, 13, 47, 51, 166, DateTimeKind.Local).AddTicks(567),
+                            CreatedDate = new DateTime(2021, 3, 12, 16, 40, 25, 52, DateTimeKind.Local).AddTicks(7330),
                             DateOfBirth = new DateTime(1996, 11, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "nitesh@gmail.com",
                             FirstName = "Nitesh",
                             LastName = "Shrestha",
-                            Password = "1000.ZWGbnOSmUYzAZpCXZ9clVg==.Kq7L9ujCz8uR1oNNx+yhBTArBYkYanApSPXkYlECEdk=",
+                            Password = "1000.8n9Tfx7iKU8Q8i52SX5KkA==.YwQHRjkfdgVSLMFmRSiHdIMEbsnPZ1I5y3Rikw0zMjQ=",
                             Username = "nitesh"
                         });
+                });
+
+            modelBuilder.Entity("Entities.Models.Folder", b =>
+                {
+                    b.HasOne("Entities.Models.Folder", null)
+                        .WithMany("Folders")
+                        .HasForeignKey("ParentFolderId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Entities.Models.RefreshToken", b =>
@@ -110,6 +186,11 @@ namespace Entities.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Entities.Models.Folder", b =>
+                {
+                    b.Navigation("Folders");
                 });
 
             modelBuilder.Entity("Entities.Models.User", b =>

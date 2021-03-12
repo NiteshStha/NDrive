@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Utilities.Helpers;
 using Utilities.Responses;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -42,7 +43,7 @@ namespace NDriveAPI.Controllers
                 var response = await _authenticationService.Authenticate(model, ipAddress());
 
                 if (response == null)
-                    return BadRequest(new { message = "Username or password is incorrect" });
+                    return BadRequest(new { message = "User Name or password is incorrect" });
 
                 setTokenCookie(response.RefreshToken);
 
@@ -146,7 +147,7 @@ namespace NDriveAPI.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetUser")]
         public async Task<IActionResult> Get(int id)
         {
             try
@@ -163,6 +164,87 @@ namespace NDriveAPI.Controllers
             {
                 Console.WriteLine(ex);
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error while retrieving data");
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> Post(SignUpModel user)
+        {
+            try
+            {
+                var checkUser = await _repo.User.FindById(u => u.Username == user.Username || u.Email == user.Email);
+                if (checkUser != null)
+                    return StatusCode(StatusCodes.Status409Conflict, "User Name or Email already exists");
+
+                User newUser = new User
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Username = user.Username,
+                    Password = PasswordHasher.Hash(user.Password),
+                    Email = user.Email,
+                    DateOfBirth = user.DateOfBirth,
+                    CreatedDate = DateTime.Now
+                };
+                await _repo.User.Create(newUser);
+                await _repo.Commit();
+                return Created("GetUser", newUser);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error while posting data");
+            }
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, [FromBody] UserUpdateModel model)
+        {
+            try
+            {
+                var user = await _repo.User.FindById(id);
+
+                if (user == null) return BadRequest();
+                if((await _repo.User.FindById(u => u.Username == model.Username)) != null)
+                    return StatusCode(StatusCodes.Status409Conflict, "User Name already exists");
+                if ((await _repo.User.FindById(u => u.Email == model.Email)) != null)
+                    return StatusCode(StatusCodes.Status409Conflict, "Email already exists");
+
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.Username = model.Username;
+                user.Email = model.Email;
+                user.DateOfBirth = model.DateOfBirth;
+
+                _repo.User.Update(user);
+                await _repo.Commit();
+
+                return StatusCode(StatusCodes.Status204NoContent, "User Updated Successfully");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error while updating data");
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                var user = await _repo.User.FindById(id);
+
+                if (user == null) return NotFound();
+                _repo.User.Delete(user);
+                await _repo.Commit();
+                return StatusCode(StatusCodes.Status204NoContent, "User Deleted Successfully");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error while deleting data");
             }
         }
 

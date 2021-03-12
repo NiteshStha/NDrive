@@ -18,10 +18,10 @@ namespace Repository
             _repositoryContext = repositoryContext;
         }
 
-        public async Task<IEnumerable<T>> FindAll() => await _repositoryContext.Set<T>().ToListAsync();
+        public async Task<IEnumerable<T>> FindAll() => await _repositoryContext.Set<T>().AsNoTracking().ToListAsync();
 
         public async Task<IEnumerable<T>> FindByCondition(Expression<Func<T, bool>> expression) =>
-            await _repositoryContext.Set<T>().Where(expression).ToListAsync();
+            await _repositoryContext.Set<T>().Where(expression).AsNoTracking().ToListAsync();
 
         public async Task<T> FindById(int id) => await _repositoryContext.Set<T>().FindAsync(id);
 

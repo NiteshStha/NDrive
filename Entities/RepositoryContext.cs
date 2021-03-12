@@ -12,9 +12,25 @@ namespace Entities
         }
         public DbSet<User> Users { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<Folder> Folders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // For Cascade on delete when deleting the parent folder
+            modelBuilder.Entity<Folder>()
+              .HasMany(f => f.Folders)
+              .WithOne()
+              .OnDelete(DeleteBehavior.Cascade);
+
+            // Making Email in User Table Unique
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
+            // Making Username in User Table Unique
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Username)
+                .IsUnique();
+
             modelBuilder.Entity<User>().HasData(new
             {
                 UserId = 1,
@@ -25,6 +41,41 @@ namespace Entities
                 Email = "nitesh@gmail.com",
                 DateOfBirth = new DateTime(1996, 11, 25),
                 CreatedDate = DateTime.Now
+            });
+
+            modelBuilder.Entity<Folder>().HasData(new
+            {
+                FolderId = 1,
+                FolderName = "Game",
+            });
+            modelBuilder.Entity<Folder>().HasData(new
+            {
+                FolderId = 2,
+                FolderName = "Rocket League",
+                ParentFolderId = 1
+            });
+            modelBuilder.Entity<Folder>().HasData(new
+            {
+                FolderId = 3,
+                FolderName = "Stardew Valley",
+                ParentFolderId = 1
+            });
+            modelBuilder.Entity<Folder>().HasData(new
+            {
+                FolderId = 4,
+                FolderName = "Fortnite",
+                ParentFolderId = 1
+            });
+            modelBuilder.Entity<Folder>().HasData(new
+            {
+                FolderId = 5,
+                FolderName = "Anime",
+            });
+            modelBuilder.Entity<Folder>().HasData(new
+            {
+                FolderId = 6,
+                FolderName = "Attack On Titan",
+                ParentFolderId = 5
             });
         }
     }

@@ -6,6 +6,7 @@ namespace Contract
     {
         IUserRepository User { get; }
         IRefreshTokenRepository RefreshToken { get; }
+        IFolderRepository Folder { get; }
 
         Task Commit();
         void Save();
