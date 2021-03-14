@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using NDriveAPI.Helpers;
-using NDriveAPI.Models.User;
+using NDriveAPI.Models.UserModels;
 using NDriveAPI.Services;
 using System;
 using System.Collections.Generic;
@@ -153,6 +153,8 @@ namespace NDriveAPI.Controllers
             try
             {
                 var user = await _repo.User.FindById(id);
+                if (user == null) return NotFound();
+
                 return Ok(new JsonResponse<User>
                     (
                         StatusCodes.Status200OK,

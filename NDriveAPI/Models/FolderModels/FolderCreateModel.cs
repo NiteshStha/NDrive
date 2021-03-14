@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NDriveAPI.Models.Folder
+namespace NDriveAPI.Models.FolderCreateModel
 {
     public class FolderCreateModel
     {

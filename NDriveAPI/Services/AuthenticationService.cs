@@ -3,7 +3,7 @@ using Entities.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using NDriveAPI.Helpers;
-using NDriveAPI.Models.User;
+using NDriveAPI.Models.UserModels;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;

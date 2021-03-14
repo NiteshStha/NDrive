@@ -1,4 +1,4 @@
-﻿using NDriveAPI.Models.User;
+﻿using NDriveAPI.Models.UserModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace NDriveAPI.Models.User
+namespace NDriveAPI.Models.UserModels
 {
     public class SignInModel
     {

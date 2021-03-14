@@ -13,6 +13,7 @@ namespace Entities
         public DbSet<User> Users { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Folder> Folders { get; set; }
+        public DbSet<File> Files { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,6 +32,7 @@ namespace Entities
                 .HasIndex(u => u.Username)
                 .IsUnique();
 
+            // Seeding User Table
             modelBuilder.Entity<User>().HasData(new
             {
                 UserId = 1,
@@ -43,6 +45,7 @@ namespace Entities
                 CreatedDate = DateTime.Now
             });
 
+            // Seeding Folder Table
             modelBuilder.Entity<Folder>().HasData(new
             {
                 FolderId = 1,
@@ -76,6 +79,25 @@ namespace Entities
                 FolderId = 6,
                 FolderName = "Attack On Titan",
                 ParentFolderId = 5
+            });
+
+            // Seeding File Table
+            modelBuilder.Entity<File>().HasData(new
+            {
+                FileId = 1,
+                FileName = "Report.txt",
+                FileLocation = "/Assets/Docs/Report.txt",
+                FileExtension = "txt",
+                FileSize = 5.0
+            });
+            modelBuilder.Entity<File>().HasData(new
+            {
+                FileId = 2,
+                FileName = "Episode 1",
+                FileLocation = "/Assets/Docs/Episode 1.mp4",
+                FileExtension = "mp4",
+                FileSize = 200.5,
+                ParentFolderId = 6
             });
         }
     }

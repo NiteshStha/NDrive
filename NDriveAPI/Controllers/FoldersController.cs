@@ -2,7 +2,7 @@
 using Entities.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NDriveAPI.Models.Folder;
+using NDriveAPI.Models.FolderCreateModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,12 +46,36 @@ namespace NDriveAPI.Controllers
             }
         }
 
+        [HttpGet("root")]
+        public async Task<IActionResult> GetRoot()
+        {
+            try
+            {
+                var folders = await _repo.Folder.FindByCondition(f => f.ParentFolderId == null);
+                return Ok(new JsonResponse<IEnumerable<Folder>>
+                    (
+                        StatusCodes.Status200OK,
+                        folders.Count(),
+                        folders
+                    ));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    "Error retrieving data from the database");
+            }
+        }
+
         [HttpGet("{id}", Name = "GetFolder")]
         public async Task<IActionResult> Get(int id)
         {
             try
             {
                 var folder = await _repo.Folder.FindWithSubFolders(id);
+                if (folder == null) return NotFound();
+
                 return Ok(new JsonResponse<Folder>
                     (
                         StatusCodes.Status200OK,

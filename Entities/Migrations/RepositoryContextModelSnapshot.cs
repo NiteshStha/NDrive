@@ -19,6 +19,55 @@ namespace Entities.Migrations
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+            modelBuilder.Entity("Entities.Models.File", b =>
+                {
+                    b.Property<int>("FileId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("FileExtension")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FileLocation")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<double>("FileSize")
+                        .HasColumnType("double precision");
+
+                    b.Property<int?>("ParentFolderId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("FileId");
+
+                    b.ToTable("Files");
+
+                    b.HasData(
+                        new
+                        {
+                            FileId = 1,
+                            FileExtension = "txt",
+                            FileLocation = "/Assets/Docs/Report.txt",
+                            FileName = "Report.txt",
+                            FileSize = 5.0
+                        },
+                        new
+                        {
+                            FileId = 2,
+                            FileExtension = "mp4",
+                            FileLocation = "/Assets/Docs/Episode 1.mp4",
+                            FileName = "Episode 1",
+                            FileSize = 200.5,
+                            ParentFolderId = 6
+                        });
+                });
+
             modelBuilder.Entity("Entities.Models.Folder", b =>
                 {
                     b.Property<int>("FolderId")
@@ -161,12 +210,12 @@ namespace Entities.Migrations
                         new
                         {
                             UserId = 1,
-                            CreatedDate = new DateTime(2021, 3, 12, 16, 40, 25, 52, DateTimeKind.Local).AddTicks(7330),
+                            CreatedDate = new DateTime(2021, 3, 14, 12, 15, 8, 194, DateTimeKind.Local).AddTicks(8579),
                             DateOfBirth = new DateTime(1996, 11, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "nitesh@gmail.com",
                             FirstName = "Nitesh",
                             LastName = "Shrestha",
-                            Password = "1000.8n9Tfx7iKU8Q8i52SX5KkA==.YwQHRjkfdgVSLMFmRSiHdIMEbsnPZ1I5y3Rikw0zMjQ=",
+                            Password = "1000.OV5aFP3SuLj1XyXgmVd57g==.gysffCRM2/7iUSSxwEvLfHw6xNwuTv7QijAoIcWg32Q=",
                             Username = "nitesh"
                         });
                 });

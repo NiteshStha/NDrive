@@ -9,6 +9,23 @@ namespace Entities.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Files",
+                columns: table => new
+                {
+                    FileId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    FileName = table.Column<string>(type: "text", nullable: false),
+                    FileLocation = table.Column<string>(type: "text", nullable: false),
+                    FileExtension = table.Column<string>(type: "text", nullable: false),
+                    FileSize = table.Column<double>(type: "double precision", nullable: false),
+                    ParentFolderId = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Files", x => x.FileId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Folders",
                 columns: table => new
                 {
@@ -74,6 +91,15 @@ namespace Entities.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Files",
+                columns: new[] { "FileId", "FileExtension", "FileLocation", "FileName", "FileSize", "ParentFolderId" },
+                values: new object[,]
+                {
+                    { 1, "txt", "/Assets/Docs/Report.txt", "Report.txt", 5.0, null },
+                    { 2, "mp4", "/Assets/Docs/Episode 1.mp4", "Episode 1", 200.5, 6 }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Folders",
                 columns: new[] { "FolderId", "FolderName", "ParentFolderId" },
                 values: new object[,]
@@ -85,7 +111,7 @@ namespace Entities.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserId", "CreatedDate", "DateOfBirth", "Email", "FirstName", "LastName", "Password", "Username" },
-                values: new object[] { 1, new DateTime(2021, 3, 12, 16, 40, 25, 52, DateTimeKind.Local).AddTicks(7330), new DateTime(1996, 11, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "nitesh@gmail.com", "Nitesh", "Shrestha", "1000.8n9Tfx7iKU8Q8i52SX5KkA==.YwQHRjkfdgVSLMFmRSiHdIMEbsnPZ1I5y3Rikw0zMjQ=", "nitesh" });
+                values: new object[] { 1, new DateTime(2021, 3, 14, 12, 15, 8, 194, DateTimeKind.Local).AddTicks(8579), new DateTime(1996, 11, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "nitesh@gmail.com", "Nitesh", "Shrestha", "1000.OV5aFP3SuLj1XyXgmVd57g==.gysffCRM2/7iUSSxwEvLfHw6xNwuTv7QijAoIcWg32Q=", "nitesh" });
 
             migrationBuilder.InsertData(
                 table: "Folders",
@@ -123,6 +149,9 @@ namespace Entities.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Files");
+
             migrationBuilder.DropTable(
                 name: "Folders");
 
